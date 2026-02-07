@@ -9,7 +9,7 @@ export default function ClientPage({ categories }) {
     const searchParams = useSearchParams();
     const questionParam = searchParams.get('q');
     const categoryParam = searchParams.get('c');
-    const initialQuestionIndex = (questionParam && !isNaN(questionParam)) ? parseInt(questionParam, 10) : 0;
+    const initialQuestionIndex = (questionParam && !isNaN(questionParam)) ? parseInt(questionParam, 10) : null;
 
     // Determine default category: URL param 'c' > 'daily_life' > null
     let foundCategory = null;

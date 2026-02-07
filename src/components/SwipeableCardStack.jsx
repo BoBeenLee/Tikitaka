@@ -5,7 +5,7 @@ import { motion, useMotionValue, useTransform } from 'framer-motion';
 import TopicCard from './TopicCard';
 import ShareModal from './ShareModal';
 
-const SwipeableCardStack = ({ category, onNext, onBack, initialQuestionIndex = 0 }) => {
+const SwipeableCardStack = ({ category, onNext, onBack, initialQuestionIndex }) => {
   const [shareUrl, setShareUrl] = useState(null); 
   const questions = category?.questions ?? [];
 
@@ -22,9 +22,14 @@ const SwipeableCardStack = ({ category, onNext, onBack, initialQuestionIndex = 0
   const [cards, setCards] = useState(() => {
     // Lazy initialization determines initial cards immediately
     if (category) {
-      console.log('SwipeableCardStack INIT (Lazy):', { categoryId: category.id, initialQuestionIndex });
-      const firstCard = createCard(category, initialQuestionIndex);
-      const secondCard = createCard(category, (initialQuestionIndex + 1) % questions.length); 
+      // If initialQuestionIndex is null/undefined, pick a random start
+      const startIndex = (initialQuestionIndex !== null && initialQuestionIndex !== undefined) 
+        ? initialQuestionIndex 
+        : Math.floor(Math.random() * questions.length);
+
+      console.log('SwipeableCardStack INIT (Lazy):', { categoryId: category.id, startIndex });
+      const firstCard = createCard(category, startIndex);
+      const secondCard = createCard(category, (startIndex + 1) % questions.length); 
       return [firstCard, secondCard];
     }
     return [];
@@ -32,14 +37,17 @@ const SwipeableCardStack = ({ category, onNext, onBack, initialQuestionIndex = 0
   console.log('cards', cards);
 
   // Effect only needed to handle updates if key DOES NOT change but category does 
-  // (though current parent uses key, so this might be redundant but safe)
   useEffect(() => {
     // If we already have cards and category matches, don't reset.
-    // But if category changed and we didn't remount (key stayed same), we need to reset.
-    // Check if current cards belong to current category
     if (category && cards.length > 0 && cards[0].category.id !== category.id) {
-       const firstCard = createCard(category, initialQuestionIndex);
-       const secondCard = createCard(category, (initialQuestionIndex + 1) % questions.length);
+       // New category selected, but component reused.
+       // Recalculate start index.
+       const startIndex = (initialQuestionIndex !== null && initialQuestionIndex !== undefined) 
+        ? initialQuestionIndex 
+        : Math.floor(Math.random() * questions.length);
+       
+       const firstCard = createCard(category, startIndex);
+       const secondCard = createCard(category, (startIndex + 1) % questions.length);
        setCards([firstCard, secondCard]);
     }
   }, [category, initialQuestionIndex]);
