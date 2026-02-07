@@ -3,35 +3,63 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useMotionValue, useTransform } from 'framer-motion';
 import TopicCard from './TopicCard';
+import ShareModal from './ShareModal';
 
-const SwipeableCardStack = ({ category, onNext, onBack }) => {
-  const [cards, setCards] = useState([]);
+const SwipeableCardStack = ({ category, onNext, onBack, initialQuestionIndex = 0 }) => {
+  const [shareUrl, setShareUrl] = useState(null); 
+  const questions = category?.questions ?? [];
 
   // Helper to create a unique card object
-  const createCard = (cat) => {
-    const questions = cat.questions;
-    const randomIndex = Math.floor(Math.random() * questions.length);
+  const createCard = (cat, questionIndex) => {
     return {
-      id: Math.random().toString(36).substr(2, 9),
-      question: questions[randomIndex],
+      id: questionIndex,
+      question: questions[questionIndex],
+      questionIndex,
       category: cat
     };
   };
-  
-  // Initialize stack with 2 cards
-  useEffect(() => {
+
+  const [cards, setCards] = useState(() => {
+    // Lazy initialization determines initial cards immediately
     if (category) {
-      setCards([createCard(category), createCard(category)]);
-    } else {
-        setCards([]); // partial reset
+      console.log('SwipeableCardStack INIT (Lazy):', { categoryId: category.id, initialQuestionIndex });
+      const firstCard = createCard(category, initialQuestionIndex);
+      const secondCard = createCard(category, (initialQuestionIndex + 1) % questions.length); 
+      return [firstCard, secondCard];
     }
-  }, [category]);
+    return [];
+  });
+  console.log('cards', cards);
+
+  // Effect only needed to handle updates if key DOES NOT change but category does 
+  // (though current parent uses key, so this might be redundant but safe)
+  useEffect(() => {
+    // If we already have cards and category matches, don't reset.
+    // But if category changed and we didn't remount (key stayed same), we need to reset.
+    // Check if current cards belong to current category
+    if (category && cards.length > 0 && cards[0].category.id !== category.id) {
+       const firstCard = createCard(category, initialQuestionIndex);
+       const secondCard = createCard(category, (initialQuestionIndex + 1) % questions.length);
+       setCards([firstCard, secondCard]);
+    }
+  }, [category, initialQuestionIndex]);
+
+  const handleShare = (card) => {
+      // Construct URL: origin + ?c=category_id&q=question_index
+      if (typeof window !== 'undefined') {
+          const url = new URL(window.location.origin);
+          url.searchParams.set('c', card.category.id);
+          url.searchParams.set('q', card.questionIndex);
+          setShareUrl(url.toString());
+      }
+  };
 
   const removeCard = (id) => {
     setCards((current) => {
       // Limit stack size to prevent memory issues, keep max 3
       const remaining = current.filter((c) => c.id !== id);
-      return [...remaining, createCard(category)];
+      const lastQuestionIndex = remaining[remaining.length - 1].questionIndex;
+      return [...remaining, createCard(category, (lastQuestionIndex + 1) % questions.length)];
     });
     // Optional: trigger external handler if we want to count questions answered
     if (onNext) onNext(); 
@@ -97,6 +125,31 @@ const SwipeableCardStack = ({ category, onNext, onBack }) => {
         <span style={{ fontSize: '1.2rem' }}>☰</span> Menu
       </button>
 
+      {/* Share Button (Top Right) */}
+      <button 
+        onClick={() => handleShare(cards[cards.length - 1])} // Share top card
+        style={{
+          position: 'absolute',
+          top: '2rem',
+          right: '2rem',
+          zIndex: 10,
+          background: 'rgba(255,255,255,0.8)',
+          border: 'none',
+          padding: '0.8rem 1.2rem',
+          borderRadius: '50px',
+          boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+          cursor: 'pointer',
+          fontWeight: '600',
+          color: '#555',
+          backdropFilter: 'blur(5px)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.5rem'
+        }}
+      >
+        <span style={{ fontSize: '1.2rem' }}>🔗</span> Share
+      </button>
+
       {cards.slice(0, 2).reverse().map((card, index, array) => {
         // array.length will be 1 or 2. 
         // If 2 cards: index 0 (bottom), index 1 (top).
@@ -106,7 +159,7 @@ const SwipeableCardStack = ({ category, onNext, onBack }) => {
         const isTop = index === array.length - 1;
         return (
           <SwipeableCard
-            key={card.id}
+            key={`${card.id}-${index}`}
             card={card}
             isTop={isTop}
             onSwipe={() => removeCard(card.id)}
@@ -114,6 +167,8 @@ const SwipeableCardStack = ({ category, onNext, onBack }) => {
           />
         );
       })}
+
+      <ShareModal url={shareUrl} onClose={() => setShareUrl(null)} />
     </div>
   );
 };
@@ -148,8 +203,9 @@ const SwipeableCard = ({ card, isTop, onSwipe, onBack }) => {
         scale: scale,
         cursor: isTop ? 'grab' : 'default',
         width: '100%',
-        maxWidth: '400px', // Narrower for portrait card look
-        height: '600px',    // Fixed height for card look
+        maxWidth: '340px', // Narrower for portrait card look
+        height: '600px',    // Fixed height for card look, should match min-height loosely but relies on content
+        maxHeight: '80vh',
         perspective: 1000,
       }}
       drag={isTop ? 'y' : false}
