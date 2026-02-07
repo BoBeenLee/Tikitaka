@@ -41,9 +41,9 @@ const TopicCard = ({ category, question, onNext, onBack, disableNext }) => {
           <div className="divider"></div>
           
           {/* Optional placeholder sub-question if real data doesn't have it */}
-          <p className="sub-question-text">
+          {/* <p className="sub-question-text">
             Say whatever comes to your mind.
-          </p>
+          </p> */}
         </div>
 
         {/* Footer */}
