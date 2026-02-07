@@ -93,7 +93,7 @@ const SwipeableCardStack = ({ category, onNext, onBack, onPhotoAnalyzed, initial
 
   if (cards.length === 0) {
       return (
-        <div className="card-stack-container" style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <div className="card-stack-container" style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '120px' }}>
              <button 
                 onClick={onBack}
                 style={{
@@ -124,7 +124,7 @@ const SwipeableCardStack = ({ category, onNext, onBack, onPhotoAnalyzed, initial
 
   // We only render the top 2 cards for performance
   return (
-    <div className="card-stack-container" style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+    <div className="card-stack-container" style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '120px' }}>
       
       {/* Absolute Back Button */}
       <button 
