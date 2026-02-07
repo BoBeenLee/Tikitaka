@@ -42,7 +42,7 @@ body {
 
 /* Category Selector */
 .main-title {
-  font-size: 3rem;
+  font-size: 2rem;
   margin-bottom: 0.5rem;
   background: linear-gradient(to right, #646cff, #9089fc);
   -webkit-background-clip: text;
