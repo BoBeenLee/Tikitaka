@@ -11,7 +11,7 @@ function ClientPageContent({ categories }) {
     const searchParams = useSearchParams();
     const questionParam = searchParams.get('q');
     const categoryParam = searchParams.get('c');
-    const initialQuestionIndex = (questionParam && !isNaN(questionParam)) ? parseInt(questionParam, 10) : null;
+    const [initialQuestionIndex, setInitialQuestionIndex] = (questionParam && !isNaN(questionParam)) ? parseInt(questionParam, 10) : null;
 
     // Determine default category: URL param 'c' > 'daily_life' > null
     let foundCategory = null;
@@ -54,6 +54,7 @@ function ClientPageContent({ categories }) {
                             questions: questions
                         };
                         setCurrentCategory(photoCategory);
+                        setInitialQuestionIndex(null)
                     }}
                     initialQuestionIndex={initialQuestionIndex}
                     key={`${currentCategory?.id}-${initialQuestionIndex}`}
