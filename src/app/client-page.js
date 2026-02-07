@@ -1,15 +1,31 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import CategorySelector from '../components/CategorySelector';
 import SwipeableCardStack from '../components/SwipeableCardStack';
 
 export default function ClientPage({ categories }) {
-    // Set "Daily Life" (id: daily_life) as the default category.
-    // If not found, fall back to null (though it should be there).
-    const defaultCategory = categories.find(c => c.id === 'daily_life') || null;
+    const searchParams = useSearchParams();
+    const questionParam = searchParams.get('q');
+    const categoryParam = searchParams.get('c');
+    const initialQuestionIndex = (questionParam && !isNaN(questionParam)) ? parseInt(questionParam, 10) : 0;
+
+    // Determine default category: URL param 'c' > 'daily_life' > null
+    let foundCategory = null;
+    if (categoryParam) {
+        foundCategory = categories.find(c => c.id === categoryParam);
+    }
+    const defaultCategory = foundCategory || categories.find(c => c.id === 'daily_life') || null;
 
     const [currentCategory, setCurrentCategory] = useState(defaultCategory);
+    // If we have a category from URL, menu should definitely be CLOSED.
+    // Actually, if we have ANY default category (which we almost always do), menu is closed.
+    // But if user just lands on root and we default to Daily Life, maybe menu shouldn't be open?
+    // The previous logic was: !defaultCategory. 
+    // If categoryParam is present, we definitely want to show that category (menu closed).
+    // If no param, we show Daily Life.
+    // Let's keep it simple: Menu is closed if we have a category.
     // If a default category is set, start with the menu CLOSED (false).
     // If no default, keep menu open (true).
     const [isMenuOpen, setIsMenuOpen] = useState(!defaultCategory);
@@ -36,6 +52,8 @@ export default function ClientPage({ categories }) {
                 <SwipeableCardStack
                     category={currentCategory}
                     onBack={handleOpenMenu} // reused to open menu
+                    initialQuestionIndex={initialQuestionIndex}
+                    key={`${currentCategory?.id}-${initialQuestionIndex}`}
                 />
             </div>
 
