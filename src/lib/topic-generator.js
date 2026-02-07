@@ -6,7 +6,7 @@ export async function generateAllQuestions(categories) {
     // We ask for 50 questions per category to be safe with output token limits.
     // 6 categories * 50 questions = 300 questions.
     const prompt = `Generate engaging, open-ended English conversation questions for the following categories: ${categoryTitles}.
-  For EACH category, generate 50 high-quality questions suitable for intermediate to advanced learners.
+  For EACH category, generate 50 high-quality questions suitable for intermediate learners.
   
   Return ONLY a raw JSON object where:
   - Keys are the EXACT category titles provided (e.g., "${categories[0].title}", "${categories[1].title}").
