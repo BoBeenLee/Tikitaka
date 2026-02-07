@@ -2,8 +2,9 @@ import fs from 'fs';
 import path from 'path';
 import ClientPage from './client-page';
 
-// 1. ISR Configuration (Revalidate every hour)
-export const revalidate = 3600;
+// 1. Force Dynamic Rendering (Fixes useSearchParams build error)
+export const dynamic = 'force-dynamic';
+// export const revalidate = 3600; // Conflict with force-dynamic? Let's comment out for now.
 
 async function getTopics() {
     // Simulate fetching from an external API or DB
