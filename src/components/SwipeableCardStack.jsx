@@ -34,7 +34,6 @@ const SwipeableCardStack = ({ category, onNext, onBack, initialQuestionIndex }) 
     }
     return [];
   });
-  console.log('cards', cards);
 
   // Effect only needed to handle updates if key DOES NOT change but category does 
   useEffect(() => {
@@ -153,7 +152,7 @@ const SwipeableCardStack = ({ category, onNext, onBack, initialQuestionIndex }) 
 
       {/* Share Button (Top Right) */}
       <button 
-        onClick={() => handleShare(cards[cards.length - 1])} // Share top card
+        onClick={() => handleShare(cards?.[0])} // Share top card
         style={{
           position: 'absolute',
           top: '2rem',
