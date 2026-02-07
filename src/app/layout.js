@@ -21,20 +21,13 @@ export const metadata = {
         siteName: 'Tikitaka',
         locale: 'en_US',
         type: 'website',
-        images: [
-            {
-                url: '/opengraph-image.png', // Fallback to a standard name, user can add file later
-                width: 1200,
-                height: 630,
-                alt: 'Tikitaka - Conversation Topics',
-            },
-        ],
+
     },
     twitter: {
         card: 'summary_large_image',
         title: 'Tikitaka - English Conversation Topics',
         description: 'Generate engaging English conversation topics for study groups.',
-        images: ['/opengraph-image.png'],
+
         creator: '@tikitaka',
     },
     icons: {
