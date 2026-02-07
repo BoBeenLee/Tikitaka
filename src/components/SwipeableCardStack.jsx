@@ -148,7 +148,7 @@ const SwipeableCardStack = ({ category, onNext, onBack, onPhotoAnalyzed, initial
           gap: '0.5rem'
         }}
       >
-        <span style={{ fontSize: '1.2rem' }}>☰</span> Menu
+        <span style={{ fontSize: '1.2rem' }}>☰</span>
       </button>
 
       {/* Share Button (Top Right) */}
@@ -238,7 +238,8 @@ const SwipeableCard = ({ card, isTop, onSwipe, onSwipeBack, onBack }) => {
         cursor: isTop ? 'grab' : 'default',
         width: '100%',
         maxWidth: '340px', // Narrower for portrait card look
-        height: '700px',    // Increased height for better text visibility
+        minHeight: '600px', // Match CSS min-height
+        height: 'auto',     // Dynamic height
         maxHeight: '85vh',
         perspective: 1000,
       }}
