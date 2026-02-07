@@ -4,8 +4,9 @@ import React, { useState, useEffect } from 'react';
 import { motion, useMotionValue, useTransform } from 'framer-motion';
 import TopicCard from './TopicCard';
 import ShareModal from './ShareModal';
+import PhotoInput from './PhotoInput';
 
-const SwipeableCardStack = ({ category, onNext, onBack, initialQuestionIndex }) => {
+const SwipeableCardStack = ({ category, onNext, onBack, onPhotoAnalyzed, initialQuestionIndex }) => {
   const [shareUrl, setShareUrl] = useState(null); 
   const questions = category?.questions ?? [];
 
@@ -174,6 +175,9 @@ const SwipeableCardStack = ({ category, onNext, onBack, initialQuestionIndex }) 
       >
         <span style={{ fontSize: '1.2rem' }}>🔗</span> Share
       </button>
+
+      {/* Photo Input Button (Top Center) */}
+      <PhotoInput onQuestionsGenerated={onPhotoAnalyzed} />
 
       {cards.slice(0, 2).reverse().map((card, index, array) => {
         // array.length will be 1 or 2. 

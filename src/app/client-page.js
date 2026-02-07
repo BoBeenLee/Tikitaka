@@ -45,6 +45,16 @@ function ClientPageContent({ categories }) {
                 <SwipeableCardStack
                     category={currentCategory}
                     onBack={handleOpenMenu} // reused to open menu
+                    onPhotoAnalyzed={(questions) => {
+                        const photoCategory = {
+                            id: `photo-${Date.now()}`,
+                            title: 'Photo Analysis',
+                            description: 'Questions generated from your photo',
+                            icon: '📷',
+                            questions: questions
+                        };
+                        setCurrentCategory(photoCategory);
+                    }}
                     initialQuestionIndex={initialQuestionIndex}
                     key={`${currentCategory?.id}-${initialQuestionIndex}`}
                 />
