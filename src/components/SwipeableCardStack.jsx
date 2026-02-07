@@ -73,6 +73,24 @@ const SwipeableCardStack = ({ category, onNext, onBack, initialQuestionIndex }) 
     if (onNext) onNext(); 
   };
 
+  const goBack = () => {
+      setCards((current) => {
+          if (current.length === 0) return current;
+          const currentTop = current[0]; // The card currently on top
+          const currentIdx = currentTop.questionIndex;
+
+          // Calculate previous index (circularly)
+          // If current is 0, prev is length - 1
+          const prevIdx = (currentIdx - 1 + questions.length) % questions.length;
+          
+          // We want the previous card to appear on TOP.
+          // And the current top card to become the SECOND card.
+          // Basically unshifting the previous card.
+          // But our state is [Top, Bottom]. 
+          return [createCard(category, prevIdx), currentTop];
+      });
+  };
+
   if (cards.length === 0) {
       return (
         <div className="card-stack-container" style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -171,6 +189,7 @@ const SwipeableCardStack = ({ category, onNext, onBack, initialQuestionIndex }) 
             card={card}
             isTop={isTop}
             onSwipe={() => removeCard(card.id)}
+            onSwipeBack={goBack}
             onBack={onBack}
           />
         );
@@ -181,7 +200,7 @@ const SwipeableCardStack = ({ category, onNext, onBack, initialQuestionIndex }) 
   );
 };
 
-const SwipeableCard = ({ card, isTop, onSwipe, onBack }) => {
+const SwipeableCard = ({ card, isTop, onSwipe, onSwipeBack, onBack }) => {
   const y = useMotionValue(0);
   // Rotate slightly as you drag up/down
   const rotate = useTransform(y, [-200, 200], [-10, 10]);
@@ -194,9 +213,13 @@ const SwipeableCard = ({ card, isTop, onSwipe, onBack }) => {
   const translateY = isTop ? y : 15;
 
   const handleDragEnd = (_, info) => {
-    // If dragged more than 100px up or down
-    if (Math.abs(info.offset.y) > 100) {
+    // If dragged more than 100px down (positive y)
+    if (info.offset.y > 100) {
       onSwipe();
+    }
+    // If dragged more than 100px up (negative y)
+    else if (info.offset.y < -100) {
+       onSwipeBack();
     }
   };
 
