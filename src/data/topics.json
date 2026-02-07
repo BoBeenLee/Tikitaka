@@ -1,0 +1,82 @@
+{
+  "categories": [
+    {
+      "id": "ice_breakers",
+      "title": "Ice Breakers",
+      "icon": "🧊",
+      "description": "Fun and light questions to get started.",
+      "questions": [
+        "What’s your favorite way to spend a weekend?",
+        "If you could have any superpower, what would it be?",
+        "What is your favorite food?",
+        "Do you prefer cats or dogs?",
+        "What was the last movie you watched?"
+      ]
+    },
+    {
+      "id": "daily_life",
+      "title": "Daily Life",
+      "icon": "☕",
+      "description": "Talk about your routines and habits.",
+      "questions": [
+        "What is your morning routine like?",
+        "How do you usually get to work or school?",
+        "What do you like to do after a long day?",
+        "What is your favorite season and why?",
+        "Do you like cooking? What is your best dish?"
+      ]
+    },
+    {
+      "id": "travel",
+      "title": "Travel",
+      "icon": "✈️",
+      "description": "Share your travel experiences.",
+      "questions": [
+        "What is the best place you have ever visited?",
+        "Where do you want to go for your next vacation?",
+        "Do you prefer beach vacations or city trips?",
+        "Have you ever traveled alone?",
+        "What is the most important thing you pack for a trip?"
+      ]
+    },
+    {
+      "id": "deep_abstract",
+      "title": "Deep & Abstract",
+      "icon": "🤔",
+      "description": "Philosophical and thought-provoking topics.",
+      "questions": [
+        "What is one value that is most important to you?",
+        "If you could change one thing about the world, what would it be?",
+        "What does 'success' mean to you?",
+        "Do you believe that money can buy happiness?",
+        "What is a lesson you learned the hard way?"
+      ]
+    },
+    {
+      "id": "business_career",
+      "title": "Business & Career",
+      "icon": "💼",
+      "description": "Work, goals, and professional life.",
+      "questions": [
+        "What is your dream job?",
+        "What is the biggest challenge you face at work?",
+        "Do you prefer working alone or in a team?",
+        "How do you handle stress at work?",
+        "Where do you see yourself in 5 years?"
+      ]
+    },
+    {
+      "id": "tech_future",
+      "title": "Tech & Future",
+      "icon": "🤖",
+      "description": "Discuss technology and the future.",
+      "questions": [
+        "What is your favorite gadget?",
+        "Do you think AI will replace human jobs?",
+        "How much time do you spend on social media?",
+        "What technology are you most excited about?",
+        "Do you prefer reading physical books or e-books?"
+      ]
+    }
+  ]
+}
