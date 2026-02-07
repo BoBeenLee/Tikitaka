@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import React from 'react';
 import ClientPage from './client-page';
 
 // 1. ISR Configuration (Revalidate every hour)
@@ -64,7 +65,9 @@ export default async function Home() {
 
     return (
         <main>
-            <ClientPage categories={topicsData.categories} />
+            <React.Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>Loading...</div>}>
+                <ClientPage categories={topicsData.categories} />
+            </React.Suspense>
         </main>
     );
 }
