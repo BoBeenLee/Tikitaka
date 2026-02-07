@@ -230,6 +230,7 @@ const SwipeableCard = ({ card, isTop, onSwipe, onBack }) => {
       <TopicCard 
         category={card.category} 
         question={card.question} 
+        questionIndex={card.questionIndex}  
         onNext={onSwipe} 
         onBack={onBack}
         disableNext={!isTop}

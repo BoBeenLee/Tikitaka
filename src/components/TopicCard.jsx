@@ -2,17 +2,8 @@
 
 import React from 'react';
 
-const TopicCard = ({ category, question, onNext, onBack, disableNext }) => {
-  // Generate a stable random number for the badge (1-50) using a hash of the question string
-  const getQNumber = (str) => {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-        hash = str.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    return Math.abs(hash % 50) + 1;
-  };
-
-  const qNum = getQNumber(question || "");
+const TopicCard = ({ category, question, questionIndex }) => {
+  const qNum = questionIndex + 1;
 
   // Naive logic to split question if it has multiple sentences for the layout
   // If not, just show main question.
