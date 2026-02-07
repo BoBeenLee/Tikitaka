@@ -22,13 +22,18 @@ export async function POST(request) {
         const buffer = Buffer.from(arrayBuffer);
         const base64Image = buffer.toString("base64");
 
-        const prompt = `Analyze this image. Identify the main context, objects, or scenario. 
-    Then, generate 20 engaging, open-ended English conversation questions related to this image. 
-    Suitable for intermediate to advanced learners.
+        const prompt = `Analyze this image. 
+        1. Identify the main context, objects, or scenario.
+        2. Look for any visible English text, phrases, or idiomatic expressions in the image.
+        3. If no text is visible, infer relevant English topics, phrasal verbs, or patterns that fit the situation in the image.
+
+        Then, generate 20 engaging, open-ended English conversation questions.
+        - Prioritize questions that use the identified English patterns/expressions.
+        - Questions should be suitable for intermediate to advanced learners.
     
-    Return ONLY a raw JSON array of strings. 
-    Example: ["Question 1?", "Question 2?"]
-    Do not include markdown formatting like \`\`\`json.`;
+        Return ONLY a raw JSON array of strings. 
+        Example: ["Question 1?", "Question 2?"]
+        Do not include markdown formatting like \`\`\`json.`;
 
         const result = await model.generateContent([
             prompt,
