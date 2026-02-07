@@ -5,7 +5,9 @@ import { useSearchParams } from 'next/navigation';
 import CategorySelector from '../components/CategorySelector';
 import SwipeableCardStack from '../components/SwipeableCardStack';
 
-export default function ClientPage({ categories }) {
+import { Suspense } from 'react';
+
+function ClientPageContent({ categories }) {
     const searchParams = useSearchParams();
     const questionParam = searchParams.get('q');
     const categoryParam = searchParams.get('c');
@@ -19,15 +21,6 @@ export default function ClientPage({ categories }) {
     const defaultCategory = foundCategory || categories.find(c => c.id === 'daily_life') || null;
 
     const [currentCategory, setCurrentCategory] = useState(defaultCategory);
-    // If we have a category from URL, menu should definitely be CLOSED.
-    // Actually, if we have ANY default category (which we almost always do), menu is closed.
-    // But if user just lands on root and we default to Daily Life, maybe menu shouldn't be open?
-    // The previous logic was: !defaultCategory. 
-    // If categoryParam is present, we definitely want to show that category (menu closed).
-    // If no param, we show Daily Life.
-    // Let's keep it simple: Menu is closed if we have a category.
-    // If a default category is set, start with the menu CLOSED (false).
-    // If no default, keep menu open (true).
     const [isMenuOpen, setIsMenuOpen] = useState(!defaultCategory);
 
     const handleSelectCategory = (category) => {
@@ -65,5 +58,13 @@ export default function ClientPage({ categories }) {
                 onClose={() => currentCategory && setIsMenuOpen(false)} // Allow closing if category exists
             />
         </div>
+    );
+}
+
+export default function ClientPage(props) {
+    return (
+        <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>Loading...</div>}>
+            <ClientPageContent {...props} />
+        </Suspense>
     );
 }
