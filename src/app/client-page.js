@@ -2,49 +2,50 @@
 
 import React, { useState } from 'react';
 import CategorySelector from '../components/CategorySelector';
-import TopicCard from '../components/TopicCard';
+import SwipeableCardStack from '../components/SwipeableCardStack';
 
 export default function ClientPage({ categories }) {
-    const [currentCategory, setCurrentCategory] = useState(null);
-    const [currentQuestion, setCurrentQuestion] = useState(null);
+    // Set "Daily Life" (id: daily_life) as the default category.
+    // If not found, fall back to null (though it should be there).
+    const defaultCategory = categories.find(c => c.id === 'daily_life') || null;
+
+    const [currentCategory, setCurrentCategory] = useState(defaultCategory);
+    // If a default category is set, start with the menu CLOSED (false).
+    // If no default, keep menu open (true).
+    const [isMenuOpen, setIsMenuOpen] = useState(!defaultCategory);
 
     const handleSelectCategory = (category) => {
         setCurrentCategory(category);
-        generateQuestion(category);
+        setIsMenuOpen(false);
     };
 
-    const generateQuestion = (category) => {
-        const questions = category.questions;
-        const randomIndex = Math.floor(Math.random() * questions.length);
-        setCurrentQuestion(questions[randomIndex]);
-    };
-
-    const handleNextQuestion = () => {
-        if (currentCategory) {
-            generateQuestion(currentCategory);
-        }
-    };
-
-    const handleBack = () => {
-        setCurrentCategory(null);
-        setCurrentQuestion(null);
+    const handleOpenMenu = () => {
+        setIsMenuOpen(true);
     };
 
     return (
-        <div className="app-container">
-            {!currentCategory ? (
-                <CategorySelector
-                    categories={categories}
-                    onSelect={handleSelectCategory}
-                />
-            ) : (
-                <TopicCard
+        <div className="app-container" style={{ position: 'relative', overflow: 'hidden', height: '100vh', width: '100vw' }}>
+            {/* Main Card Stack - Always Rendered but maybe blurred/dimmed when menu is open */}
+            <div style={{
+                height: '100%',
+                width: '100%',
+                filter: isMenuOpen ? 'blur(5px) brightness(0.9)' : 'none',
+                transition: 'filter 0.3s ease',
+                pointerEvents: isMenuOpen ? 'none' : 'auto'
+            }}>
+                <SwipeableCardStack
                     category={currentCategory}
-                    question={currentQuestion}
-                    onNext={handleNextQuestion}
-                    onBack={handleBack}
+                    onBack={handleOpenMenu} // reused to open menu
                 />
-            )}
+            </div>
+
+            {/* Category Overlay */}
+            <CategorySelector
+                categories={categories}
+                onSelect={handleSelectCategory}
+                isOpen={isMenuOpen}
+                onClose={() => currentCategory && setIsMenuOpen(false)} // Allow closing if category exists
+            />
         </div>
     );
 }
