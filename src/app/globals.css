@@ -183,8 +183,8 @@ body {
   width: 100%;
   max-width: 340px; /* Wider for better readability */
   min-width: 300px; /* Prevent collapse on very small screens */
-  min-height: 420px; /* Ensure aspect ratio stability */
-  aspect-ratio: 5/7; /* Standard flashcard ratio (~0.71) */
+  height: 100%; /* Fill the container height (700px) */
+  /* aspect-ratio: 5/7; Removed to allow taller cards */
   
   display: flex;
   flex-direction: column;

@@ -115,7 +115,7 @@ const SwipeableCardStack = ({ category, onNext, onBack, onPhotoAnalyzed, initial
                   gap: '0.5rem'
                 }}
               >
-                <span style={{ fontSize: '1.2rem' }}>☰</span> Menu
+                <span style={{ fontSize: '1.2rem' }}>☰</span>
               </button>
               <div style={{ opacity: 0.5, fontStyle: 'italic' }}>Select a topic to start</div>
         </div>
@@ -173,7 +173,7 @@ const SwipeableCardStack = ({ category, onNext, onBack, onPhotoAnalyzed, initial
           gap: '0.5rem'
         }}
       >
-        <span style={{ fontSize: '1.2rem' }}>🔗</span> Share
+        <span style={{ fontSize: '1.2rem' }}>🔗</span>
       </button>
 
       {/* Photo Input Button (Top Center) */}
@@ -238,8 +238,8 @@ const SwipeableCard = ({ card, isTop, onSwipe, onSwipeBack, onBack }) => {
         cursor: isTop ? 'grab' : 'default',
         width: '100%',
         maxWidth: '340px', // Narrower for portrait card look
-        height: '600px',    // Fixed height for card look, should match min-height loosely but relies on content
-        maxHeight: '80vh',
+        height: '700px',    // Increased height for better text visibility
+        maxHeight: '85vh',
         perspective: 1000,
       }}
       drag={isTop ? 'y' : false}
