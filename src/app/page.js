@@ -20,8 +20,16 @@ async function getTopics() {
 }
 
 async function saveTopics(data) {
-    const filePath = path.join(process.cwd(), 'src', 'app', 'data', 'topics.json');
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
+    // In Vercel (Production), file system is read-only.
+    // We try to write, but catch the error so the app doesn't crash.
+    try {
+        const filePath = path.join(process.cwd(), 'src', 'app', 'data', 'topics.json');
+        fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf8');
+    } catch (error) {
+        console.warn("[WARNING] Failed to save topics.json (Expected in Vercel/Read-only fs):", error.message);
+        // We continue without saving. The new questions will be used for this render
+        // but won't persist to the next request if the server restarts.
+    }
 }
 
 export default async function Home() {
