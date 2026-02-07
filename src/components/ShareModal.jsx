@@ -2,7 +2,19 @@ import React from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 
 const ShareModal = ({ url, onClose }) => {
+  const [copied, setCopied] = React.useState(false);
+
   if (!url) return null;
+
+  const handleCopy = async () => {
+    try {
+        await navigator.clipboard.writeText(url);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+        console.error('Failed to copy!', err);
+    }
+  };
 
   return (
     <div 
@@ -49,9 +61,52 @@ const ShareModal = ({ url, onClose }) => {
             padding: '1rem', 
             background: 'white', 
             borderRadius: '16px',
-            border: '1px solid #eee'
+            border: '1px solid #eee',
+            marginBottom: '0.5rem'
         }}>
             <QRCodeSVG value={url} size={200} />
+        </div>
+
+        {/* Copy Link Section */}
+        <div style={{ 
+            width: '100%', 
+            display: 'flex', 
+            gap: '0.5rem',
+            background: '#f8f9fa',
+            padding: '0.5rem',
+            borderRadius: '12px',
+            border: '1px solid #eee'
+        }}>
+            <input 
+                readOnly 
+                value={url} 
+                style={{
+                    flex: 1,
+                    border: 'none',
+                    background: 'transparent',
+                    fontSize: '0.9rem',
+                    color: '#555',
+                    outline: 'none',
+                    textOverflow: 'ellipsis'
+                }}
+            />
+            <button 
+                onClick={handleCopy}
+                style={{
+                    background: copied ? '#4CAF50' : '#0070f3',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '8px',
+                    padding: '0.4rem 0.8rem',
+                    fontSize: '0.85rem',
+                    fontWeight: '600',
+                    cursor: 'pointer',
+                    transition: 'background 0.2s',
+                    minWidth: '70px'
+                }}
+            >
+                {copied ? 'Copied!' : 'Copy'}
+            </button>
         </div>
 
         <button 
