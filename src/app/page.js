@@ -35,33 +35,6 @@ async function saveTopics(data) {
 
 export default async function Home() {
     let topicsData = await getTopics();
-    const today = new Date().toISOString().split('T')[0];
-
-    // Check if update is needed (Daily Update Logic)
-    if (topicsData.lastUpdated !== today) {
-        console.log(`[Daily Update] Topics are outdated (Last: ${topicsData.lastUpdated}, Today: ${today}). Updating...`);
-
-        // Dynamic import to keep server-side logic isolated if needed
-        const { updateAllTopics } = await import('../lib/topic-generator');
-
-        try {
-            // Re-generate questions using Gemini
-            // Note: This process might take a few seconds. In a real production app, 
-            // this should be a background job or a separate API route called by a cron job.
-            // For this demo, we do it lazily on the first request of the day.
-            const updatedTopics = await updateAllTopics(topicsData.categories);
-
-            if (updatedTopics && updatedTopics.categories.length > 0) {
-                updatedTopics.lastUpdated = today;
-                await saveTopics(updatedTopics);
-                topicsData = updatedTopics; // Use new data for this render
-                console.log("[Daily Update] Topics updated successfully.");
-            }
-        } catch (error) {
-            console.error("[Daily Update] Failed to update topics:", error);
-            // Gracefully degrade to showing old data
-        }
-    }
 
     return (
         <main>

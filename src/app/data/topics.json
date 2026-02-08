@@ -6,6 +6,9 @@
       "icon": "🧊",
       "description": "Fun and light questions to get started.",
       "questions": [
+        "If you could have one completely useless, non-world-changing superpower (like always finding the perfect spot in a crowded parking lot), what would it be?",
+        "What item, fashion trend, or piece of technology from your childhood should immediately make a comeback?",
+        "If you could adopt any fictional creature or animal as a low-maintenance pet, what would you choose?",
         "If you could instantly master one new skill, what would it be and why?",
         "What is a surprisingly useful talent or hobby you have?",
         "What fictional world would you most hate to live in?",
@@ -52,10 +55,7 @@
         "What talent do you wish you had inherited from a family member?",
         "If you could instantly change one minor aspect of your physical appearance, what would it be?",
         "What’s the kindest thing someone has done for you recently?",
-        "What is one piece of technology you could never give up?",
-        "How do you usually decide what movie or show to watch next?",
-        "What activity makes you completely lose track of time?",
-        "What is your go-to method for remembering important dates or facts?"
+        "What is one piece of technology you could never give up?"
       ]
     },
     {
@@ -349,5 +349,5 @@
       ]
     }
   ],
-  "lastUpdated": "2026-02-07"
+  "lastUpdated": "2026-02-08"
 }
