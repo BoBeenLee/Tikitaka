@@ -8,6 +8,8 @@ export async function generateAllQuestions(categories) {
     const prompt = `Generate engaging, open-ended English conversation questions for the following categories: ${categoryTitles}.
   For EACH category, generate 50 high-quality questions suitable for intermediate learners.
   
+  IMPORTANT: The questions should be relevant to Korean culture or daily life in Korea (e.g., questions about Korean work culture, food, holidays, societal trends, or living in Korea).
+  
   Return ONLY a raw JSON object where:
   - Keys are the EXACT category titles provided (e.g., "${categories[0].title}", "${categories[1].title}").
   - Values are arrays of strings (the questions).
