@@ -7,10 +7,30 @@ import SwipeableCardStack from '../components/SwipeableCardStack';
 
 import { Suspense } from 'react';
 
-function ClientPageContent({ categories }) {
+// 10: ClientPageContent({ categories, lang }) {
+function ClientPageContent({ categories, lang = 'en' }) {
     const searchParams = useSearchParams();
     const questionParam = searchParams.get('q');
     const categoryParam = searchParams.get('c');
+
+    const t = {
+        en: {
+            photoAnalysisTitle: 'Photo Analysis',
+            photoAnalysisDesc: 'Questions generated from your photo',
+            loading: 'Loading...'
+        },
+        ja: {
+            photoAnalysisTitle: '写真分析',
+            photoAnalysisDesc: 'あなたの写真から生成された質問',
+            loading: '読み込み中...',
+        }
+    };
+    const strings = t[lang] || t.en;
+
+    // ... (rest of logic) ...
+    // ...
+    // 51: title: strings.photoAnalysisTitle,
+    // 52: description: strings.photoAnalysisDesc,
 
     // Determine default category: URL param 'c' > 'daily_life' > null
     let foundCategory = null;
@@ -48,8 +68,8 @@ function ClientPageContent({ categories }) {
                     onPhotoAnalyzed={(questions) => {
                         const photoCategory = {
                             id: `photo-${Date.now()}`,
-                            title: 'Photo Analysis',
-                            description: 'Questions generated from your photo',
+                            title: strings.photoAnalysisTitle,
+                            description: strings.photoAnalysisDesc,
                             icon: '📷',
                             questions: questions
                         };
@@ -58,6 +78,7 @@ function ClientPageContent({ categories }) {
                     }}
                     initialQuestionIndex={initialQuestionIndex}
                     key={`${currentCategory?.id}-${initialQuestionIndex}`}
+                    lang={lang}
                 />
             </div>
 
@@ -67,14 +88,22 @@ function ClientPageContent({ categories }) {
                 onSelect={handleSelectCategory}
                 isOpen={isMenuOpen}
                 onClose={() => currentCategory && setIsMenuOpen(false)} // Allow closing if category exists
+                lang={lang}
             />
         </div>
     );
 }
 
 export default function ClientPage(props) {
+    // Props contain lang now
+    const strings = {
+        en: 'Loading...',
+        ja: '読み込み中...'
+    };
+    const loadingText = strings[props.lang] || strings.en;
+
     return (
-        <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>Loading...</div>}>
+        <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>{loadingText}</div>}>
             <ClientPageContent {...props} />
         </Suspense>
     );

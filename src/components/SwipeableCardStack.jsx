@@ -5,8 +5,9 @@ import { motion, useMotionValue, useTransform } from 'framer-motion';
 import TopicCard from './TopicCard';
 import ShareModal from './ShareModal';
 import PhotoInput from './PhotoInput';
+import Link from 'next/link';
 
-const SwipeableCardStack = ({ category, onNext, onBack, onPhotoAnalyzed, initialQuestionIndex }) => {
+const SwipeableCardStack = ({ category, onNext, onBack, onPhotoAnalyzed, initialQuestionIndex, lang = 'en' }) => {
   const [shareUrl, setShareUrl] = useState(null); 
   const questions = category?.questions ?? [];
 
@@ -53,9 +54,10 @@ const SwipeableCardStack = ({ category, onNext, onBack, onPhotoAnalyzed, initial
   }, [category, initialQuestionIndex]);
 
   const handleShare = (card) => {
-      // Construct URL: origin + ?c=category_id&q=question_index
+      // Construct URL: origin + /lang + ?c=category_id&q=question_index
       if (typeof window !== 'undefined') {
           const url = new URL(window.location.origin);
+          url.pathname = `/${lang}`;
           url.searchParams.set('c', card.category.id);
           url.searchParams.set('q', card.questionIndex);
           setShareUrl(url.toString());
@@ -91,6 +93,26 @@ const SwipeableCardStack = ({ category, onNext, onBack, onPhotoAnalyzed, initial
       });
   };
 
+  const targetLang = lang === 'en' ? 'ja' : 'en';
+  const langIcon = lang === 'en' ? '🇯🇵' : '🇺🇸';
+
+  const buttonStyle = {
+      background: 'rgba(255,255,255,0.8)',
+      border: 'none',
+      padding: '0.8rem 1.2rem',
+      borderRadius: '50px',
+      boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+      cursor: 'pointer',
+      fontWeight: '600',
+      color: '#555',
+      backdropFilter: 'blur(5px)',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '0.5rem',
+      textDecoration: 'none',
+      fontSize: '1.2rem'
+  };
+
   if (cards.length === 0) {
       return (
         <div className="card-stack-container" style={{ position: 'relative', width: '100%', height: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', paddingTop: '120px' }}>
@@ -101,18 +123,8 @@ const SwipeableCardStack = ({ category, onNext, onBack, onPhotoAnalyzed, initial
                   top: '2rem',
                   left: '2rem',
                   zIndex: 10,
-                  background: 'rgba(255,255,255,0.8)',
-                  border: 'none',
-                  padding: '0.8rem 1.2rem',
-                  borderRadius: '50px',
-                  boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                  cursor: 'pointer',
-                  fontWeight: '600',
-                  color: '#555',
-                  backdropFilter: 'blur(5px)',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem'
+                  ...buttonStyle,
+                  fontSize: undefined
                 }}
               >
                 <span style={{ fontSize: '1.2rem' }}>☰</span>
@@ -134,50 +146,36 @@ const SwipeableCardStack = ({ category, onNext, onBack, onPhotoAnalyzed, initial
           top: '2rem',
           left: '2rem',
           zIndex: 10,
-          background: 'rgba(255,255,255,0.8)',
-          border: 'none',
-          padding: '0.8rem 1.2rem',
-          borderRadius: '50px',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-          cursor: 'pointer',
-          fontWeight: '600',
-          color: '#555',
-          backdropFilter: 'blur(5px)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: '0.5rem'
+          ...buttonStyle,
+          fontSize: undefined // Reset font size override if needed, or keep consistent
         }}
       >
         <span style={{ fontSize: '1.2rem' }}>☰</span>
       </button>
 
-      {/* Share Button (Top Right) */}
-      <button 
-        onClick={() => handleShare(cards?.[0])} // Share top card
-        style={{
+      {/* Top Right Controls: Language & Share */}
+      <div style={{
           position: 'absolute',
           top: '2rem',
           right: '2rem',
           zIndex: 10,
-          background: 'rgba(255,255,255,0.8)',
-          border: 'none',
-          padding: '0.8rem 1.2rem',
-          borderRadius: '50px',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-          cursor: 'pointer',
-          fontWeight: '600',
-          color: '#555',
-          backdropFilter: 'blur(5px)',
           display: 'flex',
-          alignItems: 'center',
-          gap: '0.5rem'
-        }}
-      >
-        <span style={{ fontSize: '1.2rem' }}>🔗</span>
-      </button>
+          gap: '10px'
+      }}>
+          <Link href={`/${targetLang}`} style={buttonStyle}>
+             {langIcon}
+          </Link>
+
+          <button 
+            onClick={() => handleShare(cards?.[0])} 
+            style={buttonStyle}
+          >
+            <span style={{ fontSize: '1.2rem' }}>🔗</span>
+          </button>
+      </div>
 
       {/* Photo Input Button (Top Center) */}
-      <PhotoInput onQuestionsGenerated={onPhotoAnalyzed} />
+      <PhotoInput onQuestionsGenerated={onPhotoAnalyzed} lang={lang} />
 
       {cards.slice(0, 2).reverse().map((card, index, array) => {
         // array.length will be 1 or 2. 
@@ -198,7 +196,7 @@ const SwipeableCardStack = ({ category, onNext, onBack, onPhotoAnalyzed, initial
         );
       })}
 
-      <ShareModal url={shareUrl} onClose={() => setShareUrl(null)} />
+      <ShareModal url={shareUrl} onClose={() => setShareUrl(null)} lang={lang} />
     </div>
   );
 };

@@ -2,9 +2,15 @@
 
 import React, { useRef, useState } from 'react';
 
-export default function PhotoInput({ onQuestionsGenerated, onError }) {
+export default function PhotoInput({ onQuestionsGenerated, onError, lang = 'en' }) {
   const fileInputRef = useRef(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  const t = {
+    en: { button: 'Photo Topic', analyzing: 'Analyzing...' },
+    ja: { button: '写真からトピック', analyzing: '分析中...' }
+  };
+  const strings = t[lang] || t.en;
 
   const handleFileChange = async (e) => {
     const file = e.target.files?.[0];
@@ -14,6 +20,7 @@ export default function PhotoInput({ onQuestionsGenerated, onError }) {
     try {
       const formData = new FormData();
       formData.append('image', file);
+      formData.append('lang', lang);
 
       // Call API
       const response = await fetch('/api/analyze-image', {
@@ -80,7 +87,7 @@ export default function PhotoInput({ onQuestionsGenerated, onError }) {
         }}
       >
         <span style={{ fontSize: '1.2rem' }}>{isLoading ? '⏳' : '📷'}</span>
-        {isLoading ? 'Analyzing...' : 'Photo Topic'}
+        {isLoading ? strings.analyzing : strings.button}
       </button>
     </>
   );

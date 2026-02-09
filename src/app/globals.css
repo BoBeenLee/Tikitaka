@@ -227,7 +227,7 @@ body {
   color: #333;
   line-height: 1.6;
   margin-bottom: 2rem;
-  word-break: keep-all;
+  word-break: break-word;
 }
 
 /* Decorative Divider */

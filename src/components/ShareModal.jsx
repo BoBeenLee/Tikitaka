@@ -1,8 +1,26 @@
 import React from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 
-const ShareModal = ({ url, onClose }) => {
+const ShareModal = ({ url, onClose, lang = 'en' }) => {
   const [copied, setCopied] = React.useState(false);
+
+  const t = {
+    en: {
+        title: 'Share this Question',
+        desc: 'Scan to open on another device',
+        copy: 'Copy',
+        copied: 'Copied!',
+        close: 'Close'
+    },
+    ja: {
+        title: 'この質問をシェア',
+        desc: 'スキャンして他のデバイスで開く',
+        copy: 'コピー',
+        copied: 'コピーしました!',
+        close: '閉じる'
+    }
+  };
+  const strings = t[lang] || t.en;
 
   if (!url) return null;
 
@@ -53,8 +71,8 @@ const ShareModal = ({ url, onClose }) => {
         }}
       >
         <div style={{ textAlign: 'center' }}>
-          <h3 style={{ margin: 0, fontSize: '1.2rem', color: '#333' }}>Share this Question</h3>
-          <p style={{ margin: '0.5rem 0 0', fontSize: '0.9rem', color: '#666' }}>Scan to open on another device</p>
+          <h3 style={{ margin: 0, fontSize: '1.2rem', color: '#333' }}>{strings.title}</h3>
+          <p style={{ margin: '0.5rem 0 0', fontSize: '0.9rem', color: '#666' }}>{strings.desc}</p>
         </div>
 
         <div style={{ 
@@ -105,7 +123,7 @@ const ShareModal = ({ url, onClose }) => {
                     minWidth: '70px'
                 }}
             >
-                {copied ? 'Copied!' : 'Copy'}
+                {copied ? strings.copied : strings.copy}
             </button>
         </div>
 
@@ -123,7 +141,7 @@ const ShareModal = ({ url, onClose }) => {
             width: '100%'
           }}
         >
-          Close
+          {strings.close}
         </button>
       </div>
       
