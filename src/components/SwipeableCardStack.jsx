@@ -153,25 +153,26 @@ const SwipeableCardStack = ({ category, onNext, onBack, onPhotoAnalyzed, initial
         <span style={{ fontSize: '1.2rem' }}>☰</span>
       </button>
 
-      {/* Top Right Controls: Language & Share */}
+      {/* Top Right Controls: Share & Language */}
       <div style={{
           position: 'absolute',
           top: '2rem',
           right: '2rem',
           zIndex: 10,
           display: 'flex',
+          flexDirection: 'column',
           gap: '10px'
       }}>
-          <Link href={`/${targetLang}`} style={buttonStyle}>
-             {langIcon}
-          </Link>
-
           <button 
             onClick={() => handleShare(cards?.[0])} 
             style={buttonStyle}
           >
             <span style={{ fontSize: '1.2rem' }}>🔗</span>
           </button>
+
+          <Link href={`/${targetLang}`} style={buttonStyle}>
+             {langIcon}
+          </Link>
       </div>
 
       {/* Photo Input Button (Top Center) */}
