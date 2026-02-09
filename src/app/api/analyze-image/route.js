@@ -32,8 +32,9 @@ export async function POST(request) {
         1. Identify the main context, objects, or scenario.
         2. Look for any visible Japanese text or cultural elements in the image.
         3. If no text is visible, infer relevant Japanese topics that fit the situation.
+        4. If a specific grammar pattern or sentence structure is visible, prioritize questions related to that pattern.
 
-        Then, generate 20 engaging, open-ended Japanese conversation questions suitable for Korean learners of Japanese.
+        Then, generate 30 engaging, open-ended Japanese conversation questions suitable for Korean learners of Japanese.
         - Questions should be natural and encourage extended answers.
         - The output MUST be in Japanese language.
     
@@ -45,8 +46,9 @@ export async function POST(request) {
         1. Identify the main context, objects, or scenario.
         2. Look for any visible English text, phrases, or idiomatic expressions in the image.
         3. If no text is visible, infer relevant English topics or patterns that fit the situation.
+        4. If a specific grammar pattern or sentence structure is visible, prioritize questions related to that pattern.
 
-        Then, generate 20 engaging, open-ended English conversation questions suitable for Korean learners of English.
+        Then, generate 30 engaging, open-ended English conversation questions suitable for Korean learners of English.
         - Questions should be suitable for intermediate to advanced learners.
     
         Return ONLY a raw JSON array of strings. 
